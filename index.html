@@ -154,31 +154,61 @@
     }
 
     function submitOrder() {
-      const name = document.getElementById('name').value.trim();
-      const contact = document.getElementById('contact').value.trim();
-      const note = document.getElementById('note').value.trim();
-      const total = cart.reduce((sum, qty, i) => sum + qty * products[i].price, 0);
-      const payload = {
-        姓名: name,
-        聯絡方式: contact,
-        備註: note,
-        總金額: total,
-      };
-      products.forEach((p, i) => {
-        payload[p.name] = cart[i];
-      });
+  const name = document.getElementById('name').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const pay = document.getElementById('pay').value.trim();
+  const money = document.getElementById('money').value.trim();
+  const note = document.getElementById('note').value.trim();
 
-      fetch('YOUR_WEBHOOK_URL', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      }).then(() => {
-        alert("訂單已送出！");
-        window.location.reload();
-      }).catch(() => {
-        alert("發送失敗，請再試一次。");
-      });
-    }
+  const total = cart.reduce((sum, qty, i) => sum + qty * products[i].price, 0);
+  const items = products
+    .map((p, i) => cart[i] > 0 ? `<li>${p.name} × ${cart[i]}</li>` : '')
+    .filter(Boolean)
+    .join('');
+
+  if (!name || !email || !pay || !money || !items) {
+    alert("請填寫完整資訊並選擇商品！");
+    return;
+  }
+
+  const payload = {
+    姓名: name,
+    電子郵件: email,
+    匯款資訊: pay,
+    匯款金額: money,
+    備註: note,
+    總金額: total
+  };
+  products.forEach((p, i) => {
+    payload[p.name] = cart[i];
+  });
+
+  fetch('YOUR_WEBHOOK_URL', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  }).then(() => {
+    // 成功後顯示確認畫面
+    document.body.innerHTML = `
+      <div style="text-align:center; font-family: 'Noto Sans TC', sans-serif; padding: 20px;">
+        <h1>✅ 感謝您的訂購！</h1>
+        <p>我們已收到以下訂單資訊：</p>
+        <p><strong>姓名：</strong>${name}</p>
+        <p><strong>電子郵件：</strong>${email}</p>
+        <p><strong>匯款資訊：</strong>${pay}</p>
+        <p><strong>匯款金額：</strong>${money}</p>
+        <p><strong>備註：</strong>${note || '（無）'}</p>
+        <h3>📦 購買商品：</h3>
+        <ul style="text-align:left; display:inline-block;">${items}</ul>
+        <p><strong>總金額：</strong>$${total}</p>
+        <p style="margin-top:30px;">請耐心等候確認～</p>
+      </div>
+    `;
+  }).catch(() => {
+    alert("發送失敗，請再試一次。");
+  });
+}
+
   </script>
 </body>
 </html>
