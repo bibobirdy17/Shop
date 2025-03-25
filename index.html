@@ -224,16 +224,6 @@ document.body.innerHTML = `
     alert("發送失敗，請再試一次。");
   });
 }
-function downloadPage() {
-  const el = document.getElementById('confirmation');
-  const blob = new Blob([el.outerHTML], { type: 'text/html' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `訂單確認-${name}.html`;
-  a.click();
-  URL.revokeObjectURL(url);
-}
 
   </script>
 </body>
