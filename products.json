@@ -1,10 +1,30 @@
-[
-  {
-    "name": "比比波波娃娃組",
-    "price": 880
-  },
-  {
-    "name": "鏡子鑰匙圈組",
-    "price": 740
-  }
+from PIL import Image
+import os
+
+# Define image input and output paths
+input_paths = [
+    "/mnt/data/螢幕擷取畫面 (5).png",
+    "/mnt/data/螢幕擷取畫面 (6).png"
 ]
+output_paths = [
+    "/mnt/data/item1_sq.png",
+    "/mnt/data/item2_sq.png"
+]
+
+# Function to crop center square from image
+def crop_center_square(image):
+    width, height = image.size
+    edge = min(width, height)
+    left = (width - edge) // 2
+    top = (height - edge) // 2
+    right = left + edge
+    bottom = top + edge
+    return image.crop((left, top, right, bottom))
+
+# Process and save cropped images
+for input_path, output_path in zip(input_paths, output_paths):
+    with Image.open(input_path) as img:
+        cropped = crop_center_square(img)
+        cropped.save(output_path)
+
+output_paths
