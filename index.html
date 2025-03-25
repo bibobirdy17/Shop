@@ -10,7 +10,7 @@
       font-family: 'Noto Sans TC', sans-serif;
       padding: 16px;
       margin: auto;
-      background-color: #fffdfd;
+      background-color: #DDDDFF;
       max-width: 800px;
     }
     h1 {
@@ -81,7 +81,7 @@
       border-radius: 5px;
     }
     button {
-      background-color: orange;
+      background-color: #84C1FF;
       color: white;
       font-size: 16px;
       padding: 12px;
@@ -161,11 +161,12 @@
       const note = document.getElementById('note').value.trim();
 
       const total = cart.reduce((sum, qty, i) => sum + qty * products[i].price, 0);
-      const itemsHTML = products.map((p, i) => cart[i] > 0 ? `
-        <div style="border:1px solid #ccc; border-radius:10px; padding:10px; width:160px;">
-          <img src="${p.image}" alt="${p.name}" style="width:100%; border-radius:8px;">
-          <div style="margin-top:6px;">${p.name} × ${cart[i]}</div>
-        </div>` : '').filter(Boolean).join('');
+      const itemsHTML = products
+        .map((p, i) => cart[i] > 0 ? `
+          <div style="border:1px solid #ccc; border-radius:10px; padding:10px; width:160px;">
+            <img src="${p.image}" alt="${p.name}" style="width:100%; border-radius:8px;">
+            <div style="margin-top:6px;">${p.name} × ${cart[i]}</div>
+          </div>` : '').filter(Boolean).join('');
 
       if (!name || !email || !pay || !money || !itemsHTML) {
         alert("請填寫完整資訊並選擇商品！");
@@ -175,7 +176,7 @@
       const payload = { 姓名: name, 電子郵件: email, 匯款資訊: pay, 匯款金額: money, 備註: note, 總金額: total };
       products.forEach((p, i) => { payload[p.name] = cart[i]; });
 
-      fetch('https://script.google.com/macros/s/AKfycbzKco8w-UHRQfdv8VbfVSVldkJt_mmI3zkFPv0pGpL-Ls3fW4a5cFYd0-ZsK7gI82cK4Q/exec', {
+      fetch('YOUR_WEBHOOK_URL', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
@@ -189,7 +190,28 @@
             <p><strong>匯款資訊：</strong>${pay}</p>
             <p><strong>匯款金額：</strong>${money}</p>
             <p><strong>備註：</strong>${note || '（無）'}</p>
-            <h3>📦 購買商品：</h3>
+            <h3>🚞 購買商品：</h3>
             <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:20px; margin-top:10px;">
               ${itemsHTML}
-            </
+            </div>
+            <p style="font-weight:bold; margin-top:20px;">總金額：$${total}</p>
+            <button onclick="downloadPageAsImage()" style="margin-top:25px; background:#444; color:white; padding:10px 20px; border:none; border-radius:6px; font-size:16px;">📄 下載訂單確認圖</button>
+            <p style="margin-top:30px;">請耐心等候商品抵達～</p>
+          </div>
+        `;
+      }).catch(() => {
+        alert("發送失敗，請再試一次。");
+      });
+    }
+
+    function downloadPageAsImage() {
+      html2canvas(document.getElementById("confirmation")).then(canvas => {
+        const link = document.createElement("a");
+        link.download = "訂單確認.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+      });
+    }
+  </script>
+</body>
+</html>
