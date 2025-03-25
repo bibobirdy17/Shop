@@ -175,7 +175,7 @@
       const payload = { 姓名: name, 電子郵件: email, 匯款資訊: pay, 匯款金額: money, 備註: note, 總金額: total };
       products.forEach((p, i) => { payload[p.name] = cart[i]; });
 
-      fetch('YOUR_WEBHOOK_URL', {
+      fetch('https://script.google.com/macros/s/AKfycbzKco8w-UHRQfdv8VbfVSVldkJt_mmI3zkFPv0pGpL-Ls3fW4a5cFYd0-ZsK7gI82cK4Q/exec', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload)
