@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <title>Arwen開團購物</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="css/util.css">
+  <link rel="stylesheet" href="css/main.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <!-- ✅ 自訂樣式 -->
+  <style>
+    .contact100-more {
+      position: relative;
+      color: white;
+    }
+    .contact100-more::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background-color: rgba(0, 0, 0, 0.3);
+      z-index: 0;
+    }
+    .contact100-more .flex-col {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      height: 100%;
+    }
+    .contact100-more .txt2 {
+      color: white;
+      text-align: center;
+    }
+    .contact100-form-btn {
+      background: linear-gradient(45deg, #6e46ae, #d7a9f9);
+      color: white;
+      transition: background 0.3s ease;
+    }
+    .contact100-form-btn:hover {
+      background: linear-gradient(45deg, #5a3794, #c693f0);
+    }
+
+    .product-card {
+      border: 2px solid #ccc;
+      border-radius: 10px;
+      padding: 15px;
+      width: 140px;
+      text-align: center;
+      background-color: white;
+    }
+
+    .quantity-control {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .quantity-control button {
+      width: 30px;
+      height: 30px;
+      font-size: 18px;
+      border: none;
+      background: #d7a9f9;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .quantity-control input {
+      width: 40px;
+      text-align: center;
+      border: none;
+      background: transparent;
+      font-size: 16px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container-contact100">
+    <div class="wrap-contact100">
+
+      <!-- 🔵 開團說明區 -->
+      <div class="contact100-more flex-col-c-m" style="background-image: url('image.jpeg');">
+        <div class="flex-col size2 p-t-55">
+          <span class="txt2">此次開團商品與付款說明</span>
+          <span class="txt2">請確認數量與金額後再送出</span>
+          <span class="txt2">感謝支持，by Arwen</span>
+        </div>
+      </div>
+
+      <!-- 🧸 商品卡片區塊開始 -->
+      <div id="product-section" class="p-t-40 p-b-30">
+        <h3 class="txt2 p-b-20">選擇商品</h3>
+        <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: center;">
+          
+          <!-- 🟡 商品 1：立牌 -->
+          <!-- ✅ 商品區開始 -->
+          <div class="product-card" data-price="600">
+            <img src="image/item1.png" alt="立牌" style="width: 100px;">
+            <div class="txt2 p-t-10">立牌 - $600</div>
+            <div class="quantity-control">
+              <button onclick="updateQuantity(this, -1)">-</button>
+              <input type="number" name="product1" value="0" readonly>
+              <button onclick="updateQuantity(this, 1)">+</button>
+            </div>
+          </div>
+          <!-- ✅ 商品區結束 -->
+
+          <!-- 🟣 商品 2：娃娃 -->
+          <!-- ✅ 商品區開始 -->
+          <div class="product-card" data-price="500">
+            <img src="image/item2.png" alt="娃娃" style="width: 100px;">
+            <div class="txt2 p-t-10">娃娃 - $500</div>
+            <div class="quantity-control">
+              <button onclick="updateQuantity(this, -1)">-</button>
+              <input type="number" name="product2" value="0" readonly>
+              <button onclick="updateQuantity(this, 1)">+</button>
+            </div>
+          </div>
+          <!-- ✅ 商品區結束 -->
+
+        </div>
+      </div>
+      <!-- 🧸 商品卡片區塊結束 -->
+
+      <!-- 🧾 總金額確認 -->
+      <div class="p-t-20 p-b-40" style="text-align:center;">
+        <span class="txt2">總金額：</span>
+        <span id="total-price" class="txt2" style="font-weight:bold;">$0</span>
+      </div>
+
+      <!-- 表單送出區 -->
+      <form id="google-form" class="contact100-form validate-form">
+        <span class="contact100-form-title">填寫資料</span>
+
+        <label class="label-input100" for="nickname">您的暱稱 *</label>
+        <div class="wrap-input100 validate-input" data-validate="暱稱為必填">
+          <input id="nickname" class="input100" type="text" placeholder="輸入暱稱" required>
+          <span class="focus-input100"></span>
+        </div>
+
+        <div class="container-contact100-form-btn">
+          <button class="contact100-form-btn" type="submit">送出訂單</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- ✅ 表單送出與金額計算功能 -->
+  <script>
+    function updateQuantity(button, change) {
+      const input = button.parentElement.querySelector('input');
+      let value = parseInt(input.value) + change;
+      if (value < 0) value = 0;
+      input.value = value;
+      updateTotalPrice();
+    }
+
+    function updateTotalPrice() {
+      let total = 0;
+      document.querySelectorAll('.product-card').forEach(card => {
+        const price = parseInt(card.dataset.price);
+        const qty = parseInt(card.querySelector('input').value);
+        total += price * qty;
+      });
+      document.getElementById('total-price').innerText = `$${total}`;
+    }
+
+    $('#google-form').submit(function (e) {
+      e.preventDefault();
+
+      const nickname = $('#nickname').val().trim();
+      const product1 = $('input[name="product1"]').val();
+      const product2 = $('input[name="product2"]').val();
+      const total = document.getElementById('total-price').innerText.replace('$', '');
+
+      if (!nickname) {
+        alert("請輸入暱稱");
+        return;
+      }
+
+      $.ajax({
+        url: "https://docs.google.com/forms/d/e/1FAIpQLScO7oArWiXokQqw-7Fgxa0b_KVj-72VUG1aHv5HSmaNhIR25A/formResponse",
+        data: {
+          "entry.1071880591": nickname,
+          "entry.1234567890": product1,   // TODO: 替換成你對應商品1欄位
+          "entry.2234567890": product2,   // TODO: 替換成你對應商品2欄位
+          "entry.9999999999": total       // TODO: 替換成你對應總金額欄位
+        },
+        type: "POST",
+        dataType: "xml",
+        statusCode: {
+          0: function () {
+            alert("✅ 訂單送出成功！");
+            $('#google-form')[0].reset();
+            $('input[name="product1"], input[name="product2"]').val(0);
+            updateTotalPrice();
+          },
+          200: function () {
+            alert("✅ 訂單送出成功！");
+            $('#google-form')[0].reset();
+            $('input[name="product1"], input[name="product2"]').val(0);
+            updateTotalPrice();
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>
