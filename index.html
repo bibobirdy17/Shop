@@ -1,23 +1,42 @@
+
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
   <title>Arwen 開團購物</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="css/util.css">
-  <link rel="stylesheet" href="css/main.css">
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
   <style>
     body {
       background-color: #f3f3f3;
       font-family: "Microsoft JhengHei", sans-serif;
+      margin: 0;
+      padding: 0;
     }
 
-    .section-box {
-      max-width: 1000px;
+    .container {
+      max-width: 800px;
       margin: auto;
-      padding: 30px 20px;
+      padding: 20px;
+      background-color: #fff;
+    }
+
+    .section {
+      margin-bottom: 30px;
+    }
+
+    .info-box {
+      background-color: #999;
+      color: white;
+      border-radius: 10px;
+      padding: 20px;
+      text-align: center;
+    }
+
+    .product-list {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
     }
 
     .product-card {
@@ -26,6 +45,7 @@
       padding: 15px;
       text-align: center;
       background-color: white;
+      width: 140px;
     }
 
     .quantity-control {
@@ -55,103 +75,49 @@
       font-size: 16px;
     }
 
-    .contact100-form-btn {
-      background: linear-gradient(45deg, #6e46ae, #d7a9f9);
-      color: white;
-      padding: 10px 20px;
-      font-size: 16px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background 0.3s ease;
-    }
-
-    .contact100-form-btn:hover {
-      background: linear-gradient(45deg, #5a3794, #c693f0);
-    }
-
-    @media (max-width: 768px) {
-      .two-column {
-        flex-direction: column;
-      }
-
-      .info-area {
-        margin-top: 30px;
-      }
+    .total {
+      font-size: 20px;
+      font-weight: bold;
+      text-align: center;
+      margin-top: 20px;
     }
   </style>
 </head>
-
 <body>
-  <div class="container-contact100">
-    <div class="wrap-contact100">
+  <div class="container">
 
-      <!-- 🧾 商品與說明雙欄 -->
-      <div class="section-box">
-        <div class="two-column" style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start;">
+    <div class="section info-box">
+      <p>此次開團商品與付款說明</p>
+      <p>請確認數量與金額後再送出</p>
+      <p>感謝支持，by Arwen</p>
+    </div>
 
-          <!-- 🔸 商品區 -->
-          <div style="flex: 2 1 300px;">
-            <!-- 總金額 -->
-            <div style="font-size: 20px; font-weight: bold; margin-bottom: 20px;">
-              總金額：<span id="total-price">$0</span>
-            </div>
-
-            <!-- 商品列表 -->
-            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 20px;">
-              <!-- ✅ 商品1 -->
-              <div class="product-card" data-price="600">
-                <img src="image/item1.png" alt="立牌" style="width: 100px;">
-                <div class="txt2 p-t-10">立牌 - $600</div>
-                <div class="quantity-control">
-                  <button onclick="updateQuantity(this, -1)">-</button>
-                  <input type="number" name="product1" value="0" readonly>
-                  <button onclick="updateQuantity(this, 1)">+</button>
-                </div>
-              </div>
-
-              <!-- ✅ 商品2 -->
-              <div class="product-card" data-price="500">
-                <img src="image/item2.png" alt="娃娃" style="width: 100px;">
-                <div class="txt2 p-t-10">娃娃 - $500</div>
-                <div class="quantity-control">
-                  <button onclick="updateQuantity(this, -1)">-</button>
-                  <input type="number" name="product2" value="0" readonly>
-                  <button onclick="updateQuantity(this, 1)">+</button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- 🔹 說明區 -->
-          <div class="info-area" style="flex: 1 1 250px; background: #999; color: white; border-radius: 10px; padding: 20px; text-align: center;">
-            <p>此次開團商品與付款說明</p>
-            <p>請確認數量與金額後再送出</p>
-            <p>感謝支持，by Arwen</p>
-          </div>
-
+    <div class="section product-list">
+      <div class="product-card" data-price="600">
+        <img src="image/item1.png" alt="立牌" style="width: 100px;">
+        <div>立牌 - $600</div>
+        <div class="quantity-control">
+          <button onclick="updateQuantity(this, -1)">-</button>
+          <input type="number" name="product1" value="0" readonly>
+          <button onclick="updateQuantity(this, 1)">+</button>
         </div>
       </div>
-
-      <!-- 📋 表單區 -->
-      <form id="google-form" class="contact100-form validate-form" style="text-align:center; padding-bottom: 50px;">
-        <span class="contact100-form-title">填寫資料</span>
-
-        <label class="label-input100" for="nickname">您的暱稱 *</label>
-        <div class="wrap-input100 validate-input" data-validate="暱稱為必填">
-          <input id="nickname" class="input100" type="text" placeholder="輸入暱稱" required>
-          <span class="focus-input100"></span>
+      <div class="product-card" data-price="500">
+        <img src="image/item2.png" alt="娃娃" style="width: 100px;">
+        <div>娃娃 - $500</div>
+        <div class="quantity-control">
+          <button onclick="updateQuantity(this, -1)">-</button>
+          <input type="number" name="product2" value="0" readonly>
+          <button onclick="updateQuantity(this, 1)">+</button>
         </div>
+      </div>
+    </div>
 
-        <div style="margin-top: 30px;">
-          <button class="contact100-form-btn" type="submit">送出訂單</button>
-        </div>
-      </form>
-
+    <div class="total">
+      總金額：<span id="total-price">$0</span>
     </div>
   </div>
 
-  <!-- ✅ JS區：金額計算與送出表單 -->
   <script>
     function updateQuantity(button, change) {
       const input = button.parentElement.querySelector('input');
@@ -170,46 +136,6 @@
       });
       document.getElementById('total-price').innerText = `$${total}`;
     }
-
-    $('#google-form').submit(function (e) {
-      e.preventDefault();
-
-      const nickname = $('#nickname').val().trim();
-      const product1 = $('input[name="product1"]').val();
-      const product2 = $('input[name="product2"]').val();
-      const total = document.getElementById('total-price').innerText.replace('$', '');
-
-      if (!nickname) {
-        alert("請輸入暱稱");
-        return;
-      }
-
-      $.ajax({
-        url: "https://docs.google.com/forms/d/e/1FAIpQLScO7oArWiXokQqw-7Fgxa0b_KVj-72VUG1aHv5HSmaNhIR25A/formResponse",
-        data: {
-          "entry.1071880591": nickname,    // 暱稱
-          "entry.1234567890": product1,    // 商品1數量（請換成對應 entry ID）
-          "entry.2234567890": product2,    // 商品2數量（請換成對應 entry ID）
-          "entry.9999999999": total        // 總金額（請換成對應 entry ID）
-        },
-        type: "POST",
-        dataType: "xml",
-        statusCode: {
-          0: function () {
-            alert("✅ 訂單送出成功！");
-            $('#google-form')[0].reset();
-            $('input[name="product1"], input[name="product2"]').val(0);
-            updateTotalPrice();
-          },
-          200: function () {
-            alert("✅ 訂單送出成功！");
-            $('#google-form')[0].reset();
-            $('input[name="product1"], input[name="product2"]').val(0);
-            updateTotalPrice();
-          }
-        }
-      });
-    });
   </script>
 </body>
 </html>
