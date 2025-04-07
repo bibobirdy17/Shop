@@ -11,22 +11,13 @@
   <style>
     body {
       background-color: #f3f3f3;
+      font-family: "Microsoft JhengHei", sans-serif;
     }
 
-    .product-wrapper {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 20px;
-      justify-content: center;
-      align-items: stretch;
-      padding: 30px;
-    }
-
-    .product-area {
-      flex: 1 1 300px;
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-      gap: 20px;
+    .section-box {
+      max-width: 1000px;
+      margin: auto;
+      padding: 30px 20px;
     }
 
     .product-card {
@@ -64,24 +55,6 @@
       font-size: 16px;
     }
 
-    .info-area {
-      flex: 1 1 300px;
-      background: #999;
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 10px;
-      padding: 20px;
-      text-align: center;
-    }
-
-    .total-area {
-      text-align: center;
-      font-size: 20px;
-      padding: 20px;
-    }
-
     .contact100-form-btn {
       background: linear-gradient(45deg, #6e46ae, #d7a9f9);
       color: white;
@@ -98,60 +71,69 @@
     }
 
     @media (max-width: 768px) {
-      .product-wrapper {
+      .two-column {
         flex-direction: column;
+      }
+
+      .info-area {
+        margin-top: 30px;
       }
     }
   </style>
 </head>
+
 <body>
   <div class="container-contact100">
     <div class="wrap-contact100">
 
-      <!-- 🔽 商品 + 說明雙欄排版 -->
-      <div class="product-wrapper">
+      <!-- 🧾 商品與說明雙欄 -->
+      <div class="section-box">
+        <div class="two-column" style="display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start;">
 
-        <!-- 🔸 商品區 -->
-        <div class="product-area">
-          <!-- ✅ 商品 1 -->
-          <div class="product-card" data-price="600">
-            <img src="image/item1.png" alt="立牌" style="width: 100px;">
-            <div class="txt2 p-t-10">立牌 - $600</div>
-            <div class="quantity-control">
-              <button onclick="updateQuantity(this, -1)">-</button>
-              <input type="number" name="product1" value="0" readonly>
-              <button onclick="updateQuantity(this, 1)">+</button>
+          <!-- 🔸 商品區 -->
+          <div style="flex: 2 1 300px;">
+            <!-- 總金額 -->
+            <div style="font-size: 20px; font-weight: bold; margin-bottom: 20px;">
+              總金額：<span id="total-price">$0</span>
+            </div>
+
+            <!-- 商品列表 -->
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 20px;">
+              <!-- ✅ 商品1 -->
+              <div class="product-card" data-price="600">
+                <img src="image/item1.png" alt="立牌" style="width: 100px;">
+                <div class="txt2 p-t-10">立牌 - $600</div>
+                <div class="quantity-control">
+                  <button onclick="updateQuantity(this, -1)">-</button>
+                  <input type="number" name="product1" value="0" readonly>
+                  <button onclick="updateQuantity(this, 1)">+</button>
+                </div>
+              </div>
+
+              <!-- ✅ 商品2 -->
+              <div class="product-card" data-price="500">
+                <img src="image/item2.png" alt="娃娃" style="width: 100px;">
+                <div class="txt2 p-t-10">娃娃 - $500</div>
+                <div class="quantity-control">
+                  <button onclick="updateQuantity(this, -1)">-</button>
+                  <input type="number" name="product2" value="0" readonly>
+                  <button onclick="updateQuantity(this, 1)">+</button>
+                </div>
+              </div>
             </div>
           </div>
 
-          <!-- ✅ 商品 2 -->
-          <div class="product-card" data-price="500">
-            <img src="image/item2.png" alt="娃娃" style="width: 100px;">
-            <div class="txt2 p-t-10">娃娃 - $500</div>
-            <div class="quantity-control">
-              <button onclick="updateQuantity(this, -1)">-</button>
-              <input type="number" name="product2" value="0" readonly>
-              <button onclick="updateQuantity(this, 1)">+</button>
-            </div>
-          </div>
-        </div>
-
-        <!-- 🔹 說明區 -->
-        <div class="info-area">
-          <div>
+          <!-- 🔹 說明區 -->
+          <div class="info-area" style="flex: 1 1 250px; background: #999; color: white; border-radius: 10px; padding: 20px; text-align: center;">
             <p>此次開團商品與付款說明</p>
             <p>請確認數量與金額後再送出</p>
             <p>感謝支持，by Arwen</p>
           </div>
+
         </div>
       </div>
 
-      <!-- 🔽 總金額區 -->
-      <div class="total-area">
-        總金額：<span id="total-price" style="font-weight: bold;">$0</span>
-      </div>
-
-      <!-- 🔽 表單區 -->
+      <!-- 📋 表單區 -->
       <form id="google-form" class="contact100-form validate-form" style="text-align:center; padding-bottom: 50px;">
         <span class="contact100-form-title">填寫資料</span>
 
@@ -169,7 +151,7 @@
     </div>
   </div>
 
-  <!-- ✅ JS 功能 -->
+  <!-- ✅ JS區：金額計算與送出表單 -->
   <script>
     function updateQuantity(button, change) {
       const input = button.parentElement.querySelector('input');
@@ -205,10 +187,10 @@
       $.ajax({
         url: "https://docs.google.com/forms/d/e/1FAIpQLScO7oArWiXokQqw-7Fgxa0b_KVj-72VUG1aHv5HSmaNhIR25A/formResponse",
         data: {
-          "entry.1071880591": nickname,
-          "entry.1234567890": product1,   // TODO：換成對應 entry ID
-          "entry.2234567890": product2,   // TODO：換成對應 entry ID
-          "entry.9999999999": total       // TODO：換成對應 entry ID（總金額）
+          "entry.1071880591": nickname,    // 暱稱
+          "entry.1234567890": product1,    // 商品1數量（請換成對應 entry ID）
+          "entry.2234567890": product2,    // 商品2數量（請換成對應 entry ID）
+          "entry.9999999999": total        // 總金額（請換成對應 entry ID）
         },
         type: "POST",
         dataType: "xml",
