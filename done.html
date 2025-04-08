@@ -20,12 +20,6 @@
   <p style="text-align:center;">感謝您的購買，Arwen 會盡快處理您的訂單 🙏</p>
 
   <div class="summary" id="capture-area">
-    <p><span class="label">電子郵件：</span><span id="email">未填寫</span></p>
-    <p><span class="label">姓名：</span><span id="name">未填寫</span></p>
-    <p><span class="label">金額：</span><span id="amount">未填寫</span></p>
-    <p><span class="label">銀行末五碼：</span><span id="bank">未填寫</span></p>
-    <p><span class="label">無卡時間：</span><span id="time">未填寫</span></p>
-    <p><span class="label">同意條款：</span><span id="agree">未勾選</span></p>
     <p><span class="label">總金額：</span><span id="total">未計算</span></p>
     <p><span class="label">購買明細：</span><br><span id="summary">無</span></p>
   </div>
@@ -34,12 +28,6 @@
 
   <script>
     // 讀取資料
-    document.getElementById("email").textContent = localStorage.getItem("form-email") || "未填寫";
-    document.getElementById("name").textContent = localStorage.getItem("form-name") || "未填寫";
-    document.getElementById("amount").textContent = localStorage.getItem("form-amount") || "未填寫";
-    document.getElementById("bank").textContent = localStorage.getItem("form-bank") || "未填寫";
-    document.getElementById("time").textContent = localStorage.getItem("form-time") || "未填寫";
-    document.getElementById("agree").textContent = localStorage.getItem("form-agree") || "未勾選";
     document.getElementById("total").textContent = localStorage.getItem("order-total") || "未計算";
     document.getElementById("summary").textContent = localStorage.getItem("order-summary") || "無";
 
