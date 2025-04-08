@@ -18,45 +18,6 @@
   <h1>✅ 訂單已成功送出！</h1>
   <p style="text-align:center;">感謝您的購買，Arwen 會盡快處理您的訂單 🙏</p>
 
-  <div class="summary" id="capture-area">
-  <h2>送出畫面截圖預覽</h2>
-  <img id="order-image" src="" style="width:100%;border:1px dashed #aaa;padding:10px;border-radius:10px;">
-    <p><span class="label">電子郵件：</span><span id="done-email">載入中...</span></p>
-    <p><span class="label">姓名：</span><span id="done-name">載入中...</span></p>
-    <p><span class="label">金額：</span><span id="done-amount">載入中...</span></p>
-    <p><span class="label">銀行末五碼：</span><span id="done-bank">載入中...</span></p>
-    <p><span class="label">無卡時間：</span><span id="done-time">載入中...</span></p>
-    <p><span class="label">同意條款：</span><span id="done-agree">載入中...</span></p>
-    <p><span class="label">總金額：</span><span id="done-total">載入中...</span></p>
-    <p><span class="label">購買明細：</span><span id="done-summary">載入中...</span></p>
-  </div>
-
-  <button id="download-btn" onclick="downloadImage()">下載此頁為圖片</button>
-
-  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-  <script>
-    const $ = id => document.getElementById(id);
-    $("done-email").textContent = localStorage.getItem("buyer-email") || "未填寫";
-    $("done-name").textContent = localStorage.getItem("buyer-name") || "未填寫";
-    $("done-amount").textContent = localStorage.getItem("buyer-amount") || "未填寫";
-    $("done-bank").textContent = localStorage.getItem("buyer-bank") || "未填寫";
-    $("done-time").textContent = localStorage.getItem("buyer-time") || "未填寫";
-    $("done-agree").textContent = localStorage.getItem("buyer-agree") || "未勾選";
-    $("done-total").textContent = localStorage.getItem("order-total") || "$0";
-    $("done-summary").textContent = localStorage.getItem("order-summary") || "";
-
-    
-document.getElementById("order-image").src = localStorage.getItem("order-image") || "";
-
-function downloadImage() {
-
-      html2canvas(document.querySelector("#capture-area")).then(canvas => {
-        const link = document.createElement("a");
-        link.download = "訂單明細.png";
-        link.href = canvas.toDataURL("image/png");
-        link.click();
-      });
-    }
   </script>
 </body>
 </html>
