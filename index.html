@@ -3,11 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <title>Arwen 開團購物</title>
-  <script src="index.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC&display=swap" rel="stylesheet">
   <style>
-      @media (max-width: 480px) {
+    @media (max-width: 480px) {
   .info-box {
     font-size: 13px;
     padding: 12px;
@@ -47,10 +46,7 @@
     .submit-btn { background: linear-gradient(45deg, #6e46ae, #d7a9f9); color: white; font-size: 16px; padding: 10px 30px; border: none; border-radius: 8px; cursor: pointer; margin-top: 20px; }
     #order-summary-text {font-weight: 300; font-size: 16px; line-height: 1.6; text-align: center }
     #checkout-section { margin-top: 30px; padding-top: 20px; border-top: 2px dashed #ccc; }
-    
   </style>
-
-
 <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 </head>
 <body>
@@ -95,17 +91,16 @@
     <div id="checkout-section" style="display:none;">
       <div class="total" id="order-summary-text"></div>
       <div class="payment-notice">
-        <p>💰付款須知：</p>
-        <p>匯款/無卡帳號：（822）901566584648</p>
+        <p>💰付款須知：匯款/無卡帳號：（822）901566584648</p>
         <p>請先完成匯款後再送出表單，若表單送出後未收到款項，將不列入此次訂單。</p>
-        <p>如需無卡，請填寫確切日期時間並無卡至百位數</p>
+        <p>如需無卡，請填寫日期及確切時間並無卡至百位數。</p>
       </div>
       
       <div class="form-group"><label for="email">*電子郵件，核對訂單用</label><input type="email" id="email" required></div>
       <div class="form-group"><label for="name">*社群內您的姓名，填單後禁止改名，若因買家改名找不到人而造成損失我方不負責</label><input type="text" id="name" required></div>
       <div class="form-group"><label for="amount">*匯款/無卡金額，先匯款完才能送單</label><input type="text" id="amount" required></div>
-      <div class="form-group"><label for="bank">匯款填這!銀行+您的末五碼</label><input type="text" id="bank" required></div>
-      <div class="form-group"><label for="time">無卡填這!請填寫確切日期+時間</label><input type="text" id="time"></div>
+      <div class="form-group"><label for="bank">匯款銀行+您的末五碼</label><input type="text" id="bank" required></div>
+      <div class="form-group"><label for="time">無卡時間，無卡的話至整數位，剩餘二補</label><input type="text" id="time"></div>
       <div class="form-group"><label for="agree">*我知道商品皆默認瑕疵損，且需久等，我已看過下單須知並同意所有規則</label>
         <select id="agree" required><option value="">請選擇</option><option value="是">是</option></select>
       </div>
