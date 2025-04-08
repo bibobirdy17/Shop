@@ -19,6 +19,8 @@
   <p style="text-align:center;">感謝您的購買，Arwen 會盡快處理您的訂單 🙏</p>
 
   <div class="summary" id="capture-area">
+  <h2>送出畫面截圖預覽</h2>
+  <img id="order-image" src="" style="width:100%;border:1px dashed #aaa;padding:10px;border-radius:10px;">
     <p><span class="label">電子郵件：</span><span id="done-email">載入中...</span></p>
     <p><span class="label">姓名：</span><span id="done-name">載入中...</span></p>
     <p><span class="label">金額：</span><span id="done-amount">載入中...</span></p>
@@ -43,7 +45,11 @@
     $("done-total").textContent = localStorage.getItem("order-total") || "$0";
     $("done-summary").textContent = localStorage.getItem("order-summary") || "";
 
-    function downloadImage() {
+    
+document.getElementById("order-image").src = localStorage.getItem("order-image") || "";
+
+function downloadImage() {
+
       html2canvas(document.querySelector("#capture-area")).then(canvas => {
         const link = document.createElement("a");
         link.download = "訂單明細.png";
