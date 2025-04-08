@@ -49,6 +49,7 @@
       <button class="submit-btn" onclick="submitOrder()">去付款</button>
     </div>
   </div>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script>
     function updateQty(button, delta) {
       const input = button.parentElement.querySelector('input');
@@ -68,38 +69,45 @@
       document.getElementById("total-price").innerText = `$${total}`;
     }
     function submitOrder() {
-      const cards = document.querySelectorAll(".product-card");
-      const productData = [
-        { name: "立牌", entry: "entry.639798665", card: cards[0] },
-        { name: "娃娃", entry: "entry.1590343806", card: cards[1] }
-      ];
-      const postData = {
-        "entry.2122055195": document.getElementById("total-price").innerText
-      };
-      const summary = [];
-      productData.forEach(({ name, entry, card }) => {
-        const memberCounts = {};
-        card.querySelectorAll(".member-row").forEach(row => {
-          const member = row.dataset.member;
-          const qty = parseInt(row.querySelector("input").value);
-          if (qty > 0) {
-            memberCounts[member] = qty;
-          }
-        });
-        const result = Object.entries(memberCounts)
-          .map(([m, q]) => `${m}${q}`)
-          .join(" ");
-        postData[entry] = result;
-        if (result) summary.push(`${name}: ${result}`);
-      });
-      if (summary.length === 0) {
-        alert("請至少選擇一項商品再送出！");
-        return;
+  const cards = document.querySelectorAll(".product-card");
+
+  const productData = [
+    { name: "立牌", entry: "entry.639798665", card: cards[0] },
+    { name: "娃娃", entry: "entry.1590343806", card: cards[1] }
+  ];
+
+  const postData = {
+    "entry.2122055195": document.getElementById("total-price").innerText
+  };
+
+  const summary = [];
+
+  productData.forEach(({ name, entry, card }) => {
+    const memberCounts = {};
+    card.querySelectorAll(".member-row").forEach(row => {
+      const member = row.dataset.member;
+      const qty = parseInt(row.querySelector("input").value);
+      if (qty > 0) {
+        memberCounts[member] = qty;
       }
-      localStorage.setItem("order-summary", summary.join(" / "));
-      localStorage.setItem("order-total", document.getElementById("total-price").innerText);
-      window.location.href = "pay.html";
-    }
+    });
+
+    const result = Object.entries(memberCounts)
+      .map(([m, q]) => `${m}${q}`)
+      .join(" ");
+
+    postData[entry] = result;
+    if (result) summary.push(`${name}: ${result}`);
+  });
+
+  // 把資料存入 localStorage 傳給 pay.html 使用
+  localStorage.setItem("order-summary", summary.join(" / "));
+  localStorage.setItem("order-total", document.getElementById("total-price").innerText);
+
+  window.location.href = "pay.html";
+}
+
+
   </script>
 </body>
 </html>
