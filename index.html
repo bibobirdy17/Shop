@@ -14,9 +14,13 @@
     .member-row { display: flex; justify-content: center; align-items: center; margin-top: 10px; gap: 10px; }
     .member-name { width: 30px; }
     .qty-btn { width: 30px; height: 30px; background: #d7a9f9; border: none; border-radius: 5px; color: white; font-size: 18px; cursor: pointer; }
-    .qty-input { width: 40px; height: 30px;text-align: right; line-height: 30px; font-size: 16px; border: 1px solid #ccc; border-radius: 5px;}
+    .qty-input { width: 40px; height: 30px; text-align: right; line-height: 30px; font-size: 16px; border: 1px solid #ccc; border-radius: 5px; }
+    .form-group { margin-top: 15px; }
+    .form-group label { font-weight: bold; }
+    .form-group input, .form-group select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; margin-top: 5px; }
     .total { font-size: 20px; font-weight: bold; text-align: center; margin-top: 20px; }
     .submit-btn { background: linear-gradient(45deg, #6e46ae, #d7a9f9); color: white; font-size: 16px; padding: 10px 30px; border: none; border-radius: 8px; cursor: pointer; margin-top: 20px; }
+    #checkout-section { margin-top: 30px; padding-top: 20px; border-top: 2px dashed #ccc; }
   </style>
 </head>
 <body>
@@ -26,6 +30,7 @@
       <p>請確認數量與金額後再送出</p>
       <p>感謝支持，by Arwen</p>
     </div>
+
     <div class="product-wrapper">
       <div class="product-card" data-price="600">
         <img src="image/item1.png" alt="立牌">
@@ -44,12 +49,27 @@
         <div class="member-row" data-member="寧"><span class="member-name">寧</span><button class="qty-btn" onclick="updateQty(this, -1)">-</button><input type="number" class="qty-input" value="0" readonly><button class="qty-btn" onclick="updateQty(this, 1)">+</button></div>
       </div>
     </div>
+
     <div class="total">總金額：<span id="total-price">$0</span></div>
+
     <div style="text-align: center;">
-      <button class="submit-btn" onclick="submitOrder()">去付款</button>
+      <button class="submit-btn" onclick="showCheckout()">結帳</button>
+    </div>
+
+    <div id="checkout-section" style="display:none;">
+      <div class="total" id="order-summary-text"></div>
+      <div class="form-group"><label for="email">電子郵件</label><input type="email" id="email" required></div>
+      <div class="form-group"><label for="name">社群內您的姓名</label><input type="text" id="name" required></div>
+      <div class="form-group"><label for="amount">匯款/無卡金額</label><input type="text" id="amount" required></div>
+      <div class="form-group"><label for="bank">匯款銀行+您的末五碼</label><input type="text" id="bank" required></div>
+      <div class="form-group"><label for="time">無卡時間（若有）</label><input type="text" id="time"></div>
+      <div class="form-group"><label for="agree">我知道商品皆默認瑕疵損，且需久等</label>
+        <select id="agree" required><option value="">請選擇</option><option value="是">是</option></select>
+      </div>
+      <div style="text-align: center;"><button class="submit-btn" onclick="submitOrder()">送出訂單</button></div>
     </div>
   </div>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
   <script>
     function updateQty(button, delta) {
       const input = button.parentElement.querySelector('input');
@@ -58,6 +78,7 @@
       input.value = qty;
       updateTotal();
     }
+
     function updateTotal() {
       let total = 0;
       document.querySelectorAll(".product-card").forEach(card => {
@@ -68,46 +89,85 @@
       });
       document.getElementById("total-price").innerText = `$${total}`;
     }
-    function submitOrder() {
-  const cards = document.querySelectorAll(".product-card");
 
-  const productData = [
-    { name: "立牌", entry: "entry.639798665", card: cards[0] },
-    { name: "娃娃", entry: "entry.1590343806", card: cards[1] }
-  ];
+    function showCheckout() {
+      const cards = document.querySelectorAll(".product-card");
+      const summary = [];
 
-  const postData = {
-    "entry.2122055195": document.getElementById("total-price").innerText
-  };
+      cards.forEach(card => {
+        const title = card.querySelector("div:nth-child(2)").innerText;
+        const memberLines = [];
+        card.querySelectorAll(".member-row").forEach(row => {
+          const member = row.dataset.member;
+          const qty = parseInt(row.querySelector("input").value);
+          if (qty > 0) memberLines.push(`${member} x${qty}`);
+        });
+        if (memberLines.length > 0) {
+          summary.push(`${title}<br>${memberLines.join("<br>")}`);
+        }
+      });
 
-  const summary = [];
-
-  productData.forEach(({ name, entry, card }) => {
-    const memberCounts = {};
-    card.querySelectorAll(".member-row").forEach(row => {
-      const member = row.dataset.member;
-      const qty = parseInt(row.querySelector("input").value);
-      if (qty > 0) {
-        memberCounts[member] = qty;
+      if (summary.length === 0) {
+        alert("請至少選擇一項商品再結帳！");
+        return;
       }
-    });
 
-    const result = Object.entries(memberCounts)
-      .map(([m, q]) => `${m}${q}`)
-      .join(" ");
+      document.getElementById("order-summary-text").innerHTML = `<strong>您的購買明細：</strong><br><br>${summary.join("<br><br>")}`;
+      document.getElementById("checkout-section").style.display = "block";
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "smooth" });
+    }
 
-    postData[entry] = result;
-    if (result) summary.push(`${name}: ${result}`);
-  });
+    function submitOrder() {
+      const email = document.getElementById("email").value.trim();
+      const name = document.getElementById("name").value.trim();
+      const amount = document.getElementById("amount").value.trim();
+      const bank = document.getElementById("bank").value.trim();
+      const time = document.getElementById("time").value.trim();
+      const agree = document.getElementById("agree").value;
 
-  // 把資料存入 localStorage 傳給 pay.html 使用
-  localStorage.setItem("order-summary", summary.join(" / "));
-  localStorage.setItem("order-total", document.getElementById("total-price").innerText);
+      if (!email || !name || !amount || !bank || !agree) {
+        alert("請填寫所有必填欄位！");
+        return;
+      }
 
-  window.location.href = "pay.html";
-}
+      const cards = document.querySelectorAll(".product-card");
+      const productData = [
+        { name: "立牌", entry: "entry.639798665", card: cards[0] },
+        { name: "娃娃", entry: "entry.1590343806", card: cards[1] }
+      ];
 
+      const postData = {
+        "entry.736124147": email,
+        "entry.1689239808": name,
+        "entry.1513343954": amount,
+        "entry.570491529": bank,
+        "entry.1316571057": time,
+        "entry.860047225": agree,
+        "entry.2122055195": document.getElementById("total-price").innerText
+      };
 
+      productData.forEach(({ name, entry, card }) => {
+        const memberCounts = {};
+        card.querySelectorAll(".member-row").forEach(row => {
+          const member = row.dataset.member;
+          const qty = parseInt(row.querySelector("input").value);
+          if (qty > 0) memberCounts[member] = qty;
+        });
+        const result = Object.entries(memberCounts).map(([m, q]) => `${m}${q}`).join(" ");
+        postData[entry] = result;
+      });
+
+      fetch("https://docs.google.com/forms/d/e/1FAIpQLScrL87-Kdes1jOW_ikXxI6lz7DswZQOlmOpXHjuVELUIKi_0w/formResponse", {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams(postData).toString()
+      }).then(() => {
+        alert("送出成功！");
+      }).catch(() => {
+        alert("送出失敗！");
+      });
+    }
   </script>
 </body>
 </html>
