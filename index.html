@@ -161,12 +161,6 @@
         postData[entry] = result;
       });
       
-      localStorage.setItem("form-email", email);
-      localStorage.setItem("form-name", name);
-      localStorage.setItem("form-amount", amount);
-      localStorage.setItem("form-bank", bank);
-      localStorage.setItem("form-time", time);
-      localStorage.setItem("form-agree", agree);
 
       fetch("https://docs.google.com/forms/d/e/1FAIpQLScrL87-Kdes1jOW_ikXxI6lz7DswZQOlmOpXHjuVELUIKi_0w/formResponse", {
       method: "POST",
