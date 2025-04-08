@@ -159,6 +159,12 @@
         const result = Object.entries(memberCounts).map(([m, q]) => `${m}${q}`).join(" ");
         postData[entry] = result;
       });
+      
+      localStorage.setItem("checkout-email", email);
+      localStorage.setItem("checkout-name", name);
+      localStorage.setItem("checkout-amount", amount);
+      localStorage.setItem("checkout-bank", bank);
+      localStorage.setItem("checkout-time", time);
 
       fetch("https://docs.google.com/forms/d/e/1FAIpQLScrL87-Kdes1jOW_ikXxI6lz7DswZQOlmOpXHjuVELUIKi_0w/formResponse", {
       method: "POST",
