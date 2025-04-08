@@ -1,14 +1,56 @@
-
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
   <title>訂單已送出</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Noto Sans TC', sans-serif; padding: 40px; line-height: 1.8; }
+    h1 { text-align: center; }
+    .summary { max-width: 600px; margin: auto; }
+    .label { font-weight: bold; }
+    #capture-area { padding: 20px; border: 1px dashed #ccc; margin-top: 20px; }
+    #download-btn { margin-top: 20px; background: #6e46ae; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-size: 16px; display: block; margin-left: auto; margin-right: auto; }
+  </style>
 </head>
-<body style="text-align:center; padding: 50px; font-family: sans-serif;">
+<body>
   <h1>✅ 訂單已成功送出！</h1>
-  <p>感謝您的購買，Arwen 會盡快處理您的訂單 🙏</p>
-  <a href="index.html">返回首頁</a>
+  <p style="text-align:center;">感謝您的購買，Arwen 會盡快處理您的訂單 🙏</p>
+
+  <div class="summary" id="capture-area">
+    <p><span class="label">電子郵件：</span><span id="done-email">載入中...</span></p>
+    <p><span class="label">姓名：</span><span id="done-name">載入中...</span></p>
+    <p><span class="label">金額：</span><span id="done-amount">載入中...</span></p>
+    <p><span class="label">銀行末五碼：</span><span id="done-bank">載入中...</span></p>
+    <p><span class="label">無卡時間：</span><span id="done-time">載入中...</span></p>
+    <p><span class="label">同意條款：</span><span id="done-agree">載入中...</span></p>
+    <p><span class="label">總金額：</span><span id="done-total">載入中...</span></p>
+    <p><span class="label">購買明細：</span><span id="done-summary">載入中...</span></p>
+  </div>
+
+  <button id="download-btn" onclick="downloadImage()">下載此頁為圖片</button>
+
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script>
+    const $ = id => document.getElementById(id);
+    $("done-email").textContent = localStorage.getItem("buyer-email") || "未填寫";
+    $("done-name").textContent = localStorage.getItem("buyer-name") || "未填寫";
+    $("done-amount").textContent = localStorage.getItem("buyer-amount") || "未填寫";
+    $("done-bank").textContent = localStorage.getItem("buyer-bank") || "未填寫";
+    $("done-time").textContent = localStorage.getItem("buyer-time") || "未填寫";
+    $("done-agree").textContent = localStorage.getItem("buyer-agree") || "未勾選";
+    $("done-total").textContent = localStorage.getItem("order-total") || "$0";
+    $("done-summary").textContent = localStorage.getItem("order-summary") || "";
+
+    function downloadImage() {
+      html2canvas(document.querySelector("#capture-area")).then(canvas => {
+        const link = document.createElement("a");
+        link.download = "訂單明細.png";
+        link.href = canvas.toDataURL("image/png");
+        link.click();
+      });
+    }
+  </script>
 </body>
 </html>
